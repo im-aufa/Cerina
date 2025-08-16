@@ -90,9 +90,9 @@ class _NavbarState extends State<Navbar> {
               ),
               label: '', // Empty label to remove it
             ),
-            NavigationDestination(
+            const NavigationDestination(
               icon: CircleAvatar(
-                backgroundImage: const AssetImage('assets/images/08.png'),
+                backgroundImage: AssetImage('assets/images/08.png'),
               ),
 
               label: '', // Empty label to remove it

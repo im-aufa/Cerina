@@ -1,7 +1,7 @@
-// lib/features/auth/welcome_screen.dart
-import 'package:cerina/core/utils/navbar.dart';
+import 'package:cerina/features/auth/data/auth_service.dart';
 import 'package:cerina/features/auth/widget/welcome_widget.dart';
 import 'package:cerina/features/auth/data/welcome_button_data.dart';
+import 'package:cerina/core/utils/navbar.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -12,10 +12,28 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  final List<ButtonData> buttons = ButtonData.getButtonList();
+  final AuthService _authService = AuthService();
+
+  void _navigateToHome() {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const Navbar(),
+      ),
+    );
+  }
+
+  Future<void> _loginAndNavigate() async {
+    final credentials = await _authService.login();
+    if (credentials != null && mounted) {
+      _navigateToHome();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final List<ButtonData> buttons =
+        ButtonData.getButtonList(_loginAndNavigate);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -42,14 +60,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const Navbar(),
-                      ),
-                    );
-                  },
-                  child: Text(
+                  onPressed: _navigateToHome,
+                  child: const Text(
                     'Masuk',
                     style: TextStyle(
                       color: Colors.pink,

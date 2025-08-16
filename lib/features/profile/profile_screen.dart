@@ -1,4 +1,5 @@
 import 'dart:ui'; // For BackdropFilter
+import 'package:cerina/features/profile/profile_setting.dart';
 import 'package:flutter/material.dart';
 import 'package:cerina/core/utils/responsive.dart'; // Adjust import path
 
@@ -124,9 +125,9 @@ class ProfileScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 50,
-                  backgroundImage: const AssetImage('assets/images/08.png'),
+                  backgroundImage: AssetImage('assets/images/08.png'),
                 ),
               ],
             ),
@@ -148,7 +149,12 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    print('Long Button 1 pressed');
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileSetting(
+                            user: null), // Fixed type mismatch
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -160,7 +166,7 @@ class ProfileScreen extends StatelessWidget {
                       vertical: responsive.height(2.5),
                       horizontal: responsive.width(6),
                     ),
-                    minimumSize: Size(double.infinity, 0),
+                    minimumSize: const Size(double.infinity, 0),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -194,7 +200,7 @@ class ProfileScreen extends StatelessWidget {
                       vertical: responsive.height(2.5),
                       horizontal: responsive.width(6),
                     ),
-                    minimumSize: Size(double.infinity, 0),
+                    minimumSize: const Size(double.infinity, 0),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -228,7 +234,7 @@ class ProfileScreen extends StatelessWidget {
                       vertical: responsive.height(2.5),
                       horizontal: responsive.width(6),
                     ),
-                    minimumSize: Size(double.infinity, 0),
+                    minimumSize: const Size(double.infinity, 0),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,19 +1,36 @@
+import 'package:cerina/features/auth/data/auth_service.dart';
+import 'package:cerina/core/utils/navbar.dart';
 import 'package:cerina/features/onboarding/onboarding_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
-  runApp(const MainApp());
+void main() async {
+  await dotenv.load();
+
+  final authService = AuthService();
+  bool isAuthenticated = false;
+
+  if (kIsWeb) {
+    await authService.handleWebLogin();
+    isAuthenticated = authService.isAuthenticated();
+  }
+
+  runApp(MainApp(
+    isAuthenticated: isAuthenticated,
+  ));
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  final bool isAuthenticated;
+  const MainApp({super.key, required this.isAuthenticated});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Cerina',
-      home: OnboardingScreen(),
+      home: isAuthenticated ? const Navbar() : const OnboardingScreen(),
     );
   }
 }

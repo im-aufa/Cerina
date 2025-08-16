@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
-// lib/features/auth/data/welcome_button_data.dart
 class ButtonData {
   final String title;
-  final String icon; // Changed from Icon to icon (lowercase, asset path)
-  final VoidCallback onPressed; // Uncommented for button action
+  final String icon;
+  final VoidCallback onPressed;
 
   ButtonData({
     required this.icon,
@@ -12,21 +11,17 @@ class ButtonData {
     required this.onPressed,
   });
 
-  static List<ButtonData> getButtonList() {
+  static List<ButtonData> getButtonList(VoidCallback loginCallback) {
     return [
       ButtonData(
-        icon: 'assets/icons/wa.png', // Added 'assets/icons/' prefix
+        icon: 'assets/icons/wa.png',
         title: 'Lanjutkan dengan WhatsApp',
-        onPressed: () {
-          print('Button 1 pressed'); // Placeholder action
-        },
+        onPressed: loginCallback,
       ),
       ButtonData(
         icon: 'assets/icons/g.png',
         title: 'Lanjutkan dengan Google',
-        onPressed: () {
-          print('Button 2 pressed'); // Placeholder action
-        },
+        onPressed: loginCallback,
       ),
     ];
   }

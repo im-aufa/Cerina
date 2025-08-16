@@ -65,7 +65,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                     SizedBox(width: responsive.width(2)),
-                    Text(
+                    const Text(
                       "Cerince",
                       style: TextStyle(
                         color: Colors.white,
@@ -164,8 +164,9 @@ class ChatMessageList extends StatelessWidget {
       itemCount:
           messages.length + (isLoading ? 1 : 0), // Add extra item for loading
       itemBuilder: (context, index) {
-        if (index == 0)
+        if (index == 0) {
           return const SizedBox.shrink(); // Skip initial system message
+        }
         if (isLoading && index == messages.length) {
           return const LoadingBubble(); // Show loading bubble
         }

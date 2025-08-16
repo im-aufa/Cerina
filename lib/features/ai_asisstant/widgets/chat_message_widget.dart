@@ -40,8 +40,8 @@ class ChatMessageBubble extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: isSystem
-              ? Color.fromRGBO(235, 236, 239, 1)
-              : Color.fromRGBO(253, 231, 241, 1),
+              ? const Color.fromRGBO(235, 236, 239, 1)
+              : const Color.fromRGBO(253, 231, 241, 1),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
