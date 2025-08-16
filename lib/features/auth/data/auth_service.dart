@@ -4,14 +4,23 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthService {
+  static final AuthService _instance = AuthService._internal();
+
+  factory AuthService() {
+    return _instance;
+  }
+
+  AuthService._internal();
+  static const String _apiAudience = 'https://api.aufaim.com/';
+
   final Auth0 auth0 = Auth0(
     dotenv.env['AUTH0_DOMAIN']!,
-    dotenv.env['AUTH0_CLIENT_ID']!,
+    'ExiOj9b4nVyVa8xiKFugTVEGuW4QTl1i',
   );
 
   final Auth0Web auth0Web = Auth0Web(
     dotenv.env['AUTH0_DOMAIN']!,
-    dotenv.env['AUTH0_CLIENT_ID']!,
+    'ExiOj9b4nVyVa8xiKFugTVEGuW4QTl1i',
   );
 
   Credentials? _credentials;
@@ -27,7 +36,7 @@ class AuthService {
 
       final credentials = await auth0
           .webAuthentication(scheme: dotenv.env['AUTH0_CUSTOM_SCHEME'])
-          .login(useHTTPS: true);
+          .login(useHTTPS: true, audience: _apiAudience);
 
       _credentials = credentials;
       print("Login success");
@@ -78,5 +87,16 @@ class AuthService {
         print("Error on web login: $e");
       }
     }
+  }
+
+  Future<String?> getAccessToken() async {
+    if (_credentials != null) {
+      return _credentials!.accessToken;
+    }
+    if (kIsWeb) {
+      await handleWebLogin();
+      return _credentials?.accessToken;
+    }
+    return null;
   }
 }

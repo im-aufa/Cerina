@@ -1,6 +1,8 @@
+import 'package:cerina/features/auth/data/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cerina/core/utils/responsive.dart'; // Adjust import path
-import 'data/chat_service.dart';
+import 'data/api_service.dart';
+import 'data/chat_view_model.dart';
 import 'widgets/chat_input_widget.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -12,8 +14,18 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
-  final ChatService _chatService = ChatService();
-  bool _isLoading = false; // Track loading state
+  late final ChatViewModel _chatViewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    final authService = AuthService();
+    final apiService = ApiService(authService);
+    _chatViewModel = ChatViewModel(apiService);
+    _chatViewModel.addListener(() {
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,8 +116,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   children: [
                     Expanded(
                       child: ChatMessageList(
-                        messages: _chatService.chatMessages,
-                        isLoading: _isLoading, // Pass loading state
+                        messages: _chatViewModel.chatMessages,
+                        isLoading: _chatViewModel.isLoading, // Pass loading state
                       ),
                     ),
                     SizedBox(height: responsive.height(2)),
@@ -128,23 +140,7 @@ class _ChatScreenState extends State<ChatScreen> {
     if (userMessage.isEmpty) return;
 
     _controller.clear();
-    setState(() {
-      _chatService.addUserMessage(userMessage);
-      _isLoading = true; // Start loading
-    });
-
-    try {
-      final response = await _chatService.sendMessage(userMessage);
-      setState(() {
-        _chatService.addSystemMessage(response);
-        _isLoading = false; // Stop loading
-      });
-    } catch (e) {
-      setState(() {
-        _chatService.addSystemMessage("Error: $e");
-        _isLoading = false; // Stop loading on error
-      });
-    }
+    await _chatViewModel.sendMessage(userMessage);
   }
 }
 
