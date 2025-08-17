@@ -149,10 +149,9 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(
+                    Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => const ProfileSetting(
-                            user: null), // Fixed type mismatch
+                        builder: (context) => const ProfileSetting(),
                       ),
                     );
                   },

@@ -7,8 +7,9 @@ Cerina is a Flutter-based mobile application designed to be a personal health as
 - **AI Assistant:** An AI-powered chatbot that can answer questions about menstruation, cervical cancer, and other women's health topics.
 - **Period Tracker:** A calendar view to track the user's menstrual cycle, including the ability to log menstrual flow, mood, and symptoms.
 - **Educational Resources:** A section for educational articles and tips related to women's health.
-- **User Authentication:** A simple and secure authentication flow with options to sign in with WhatsApp or Google.
+- **User Authentication:** Secure authentication flow using Auth0, which can be configured to support various identity providers.
 - **Onboarding:** An engaging, multi-page onboarding experience to introduce new users to the app's features.
+- **User Profile:** A dedicated screen for users to view and manage their profile information.
 
 ## Getting Started
 
@@ -22,13 +23,23 @@ flutter run
 
 ## Dependencies
 
+- **auth0_flutter:** For handling user authentication with Auth0.
 - **http:** For making HTTP requests to the backend API.
+- **flutter_dotenv:** For managing environment variables.
 - **smooth_page_indicator:** For displaying a smooth page indicator in the onboarding screen.
 
-## API Integration
+## Environment Variables
 
-The app communicates with a backend API to power the AI assistant. The API is secured with an API key, which must be provided as an environment variable when running the app.
+The app uses environment variables to store sensitive information like API keys and Auth0 credentials. You'll need to create a `.env` file in the root of the project and add the following variables:
 
 ```
-flutter run --dart-define=API_KEY=your_api_key
+AUTH0_DOMAIN=your_auth0_domain
+AUTH0_CLIENT_ID=your_auth0_client_id
+API_KEY=your_api_key
+```
+
+Then, you can run the app normally.
+
+```
+flutter run
 ```

@@ -30,15 +30,6 @@ class OnboardingPage extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 16),
-          Text(
-            data.description,
-            style: const TextStyle(
-              color:
-                  Colors.white70, // Slightly transparent white for description
-              fontSize: 18,
-            ),
-          ),
           if (data.image.isNotEmpty) ...[
             const SizedBox(height: 16),
             Image.asset(

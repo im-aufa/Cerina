@@ -53,21 +53,40 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // A safe way to handle the current page's data
+    final OnboardingData? currentPageData =
+        _pages.isNotEmpty && _currentPage < _pages.length
+            ? _pages[_currentPage]
+            : null;
+
+    final isFinalPage = (currentPageData?.pageType ?? OnboardingPageType.informational) == OnboardingPageType.finalPage;
+
     return Scaffold(
       body: Stack(
         children: [
           // Dynamic background based on page
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
-            child: _currentPage < _pages.length - 1
-                ? Container(
+            child: !isFinalPage
+                ? Image.asset(
+                    _backgroundImages[_currentPage],
                     key: ValueKey('background$_currentPage'),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(_backgroundImages[_currentPage]),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                    // This builder fades the image in smoothly
+                    frameBuilder:
+                        (context, child, frame, wasSynchronouslyLoaded) {
+                      if (wasSynchronouslyLoaded) {
+                        return child;
+                      }
+                      return AnimatedOpacity(
+                        child: child,
+                        opacity: frame == null ? 0 : 1,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeOut,
+                      );
+                    },
                   )
                 : Container(
                     key: const ValueKey('whiteBackground'),
@@ -80,26 +99,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Expanded(
                 child: PageView(
                   controller: _controller,
-                  children: _pages.asMap().entries.map((entry) {
-                    final int index = entry.key;
-                    final OnboardingData data = entry.value;
-                    if (index == _pages.length - 1) {
-                      return OnboardingPage(
-                        data: data,
-                        isFinalPage: true,
-                      );
-                    }
-                    return OnboardingPage(data: data);
+                  children: _pages.map((data) {
+                    return OnboardingPage(
+                      data: data,
+                      isFinalPage:
+                          data.pageType == OnboardingPageType.finalPage,
+                    );
                   }).toList(),
                 ),
               ),
               // Page indicator (only for first 3 pages, hidden on page 4)
-              if (_currentPage < _pages.length - 1)
+              if (!isFinalPage)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: SmoothPageIndicator(
                     controller: _controller,
-                    count: _pages.length - 1, // Show only 3 dots
+                    count: _pages
+                        .where((p) =>
+                            p.pageType != OnboardingPageType.finalPage)
+                        .length, // Adjust count to exclude final page
                     effect: const ExpandingDotsEffect(
                       dotColor: Colors.grey,
                       activeDotColor: Colors.white, // Changed to white
