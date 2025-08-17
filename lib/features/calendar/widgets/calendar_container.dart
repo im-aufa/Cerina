@@ -1,26 +1,23 @@
-import 'package:cerina/core/utils/responsive.dart';
 import 'package:cerina/features/calendar/widgets/mini_container.dart';
 import 'package:cerina/features/calendar/data/calendar_data.dart';
 import 'package:flutter/material.dart';
 
 class CalendarContainer extends StatelessWidget {
-  final Responsive responsive;
   final String text;
   final int? selectedIndex;
   final Function(int) onMiniContainerPressed;
   final int containerIndex;
   final double? customHeight;
-  final VoidCallback? onPressed; // New optional callback for tap
+  final VoidCallback? onPressed;
 
   const CalendarContainer({
     super.key,
-    required this.responsive,
     required this.text,
     required this.selectedIndex,
     required this.onMiniContainerPressed,
     required this.containerIndex,
     this.customHeight,
-    this.onPressed, // Added parameter
+    this.onPressed,
   });
 
   static const List<String> miniContainerImages2 = [
@@ -46,6 +43,9 @@ class CalendarContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final textTheme = Theme.of(context).textTheme;
+
     List<String>? miniContainerImages;
     switch (containerIndex) {
       case 1:
@@ -66,43 +66,39 @@ class CalendarContainer extends StatelessWidget {
     final currentDay = now.day.toString();
 
     return GestureDetector(
-      onTap: containerIndex == 0
-          ? onPressed
-          : null, // Enable tap only for Container 1
+      onTap: containerIndex == 0 ? onPressed : null,
       child: Container(
-        width: responsive.width(90),
-        height: customHeight ?? responsive.height(15),
+        width: screenSize.width * 0.90,
+        height: customHeight ?? screenSize.height * 0.15,
         margin: EdgeInsets.symmetric(
           horizontal: 16.0,
-          vertical: responsive.height(1),
+          vertical: screenSize.height * 0.01,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(responsive.width(4)),
+          borderRadius: BorderRadius.circular(screenSize.width * 0.04),
           border: Border.all(color: Colors.pink),
         ),
         child: containerIndex == 0 && weekData != null
             ? Column(
                 children: [
                   Container(
-                    height: responsive.height(5),
+                    height: screenSize.height * 0.05,
                     decoration: BoxDecoration(
                       color: Colors.pink[50],
                       borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(responsive.width(4)),
+                        top: Radius.circular(screenSize.width * 0.04),
                       ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: List.generate(7, (index) {
                         return SizedBox(
-                          width: responsive.width(8),
+                          width: screenSize.width * 0.08,
                           child: Center(
                             child: Text(
                               weekData[index]['initial']!,
-                              style: TextStyle(
-                                fontSize: responsive.fontSize(14),
+                              style: textTheme.titleSmall?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
                               ),
                             ),
                           ),
@@ -117,21 +113,17 @@ class CalendarContainer extends StatelessWidget {
                         bool isCurrentDay =
                             weekData[index]['date'] == currentDay;
                         return Container(
-                          width: responsive.width(8),
-                          height: responsive.width(8),
+                          width: screenSize.width * 0.08,
+                          height: screenSize.width * 0.08,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color:
-                                isCurrentDay ? Colors.pink[50] : Colors.white,
+                            color: isCurrentDay ? Colors.pink[50] : Colors.white,
                             border: Border.all(color: Colors.pink),
                           ),
                           child: Center(
                             child: Text(
                               weekData[index]['date']!,
-                              style: TextStyle(
-                                fontSize: responsive.fontSize(12),
-                                color: Colors.black,
-                              ),
+                              style: textTheme.bodySmall,
                             ),
                           ),
                         );
@@ -145,16 +137,15 @@ class CalendarContainer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: responsive.width(2)),
+                    padding: EdgeInsets.only(left: screenSize.width * 0.02),
                     child: Text(
                       text,
-                      style: TextStyle(
-                        fontSize: responsive.fontSize(18),
+                      style: textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  SizedBox(height: responsive.height(1)),
+                  SizedBox(height: screenSize.height * 0.01),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: List.generate(4, (index) {
@@ -162,7 +153,6 @@ class CalendarContainer extends StatelessWidget {
                           ? miniContainerImages[index]
                           : null;
                       return MiniContainer(
-                        responsive: responsive,
                         isSelected: selectedIndex == index,
                         onPressed: () => onMiniContainerPressed(index),
                         backgroundImage: backgroundImage,

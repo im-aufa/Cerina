@@ -1,7 +1,6 @@
-import 'package:cerina/core/utils/responsive.dart';
 import 'package:cerina/features/calendar/widgets/calendar_container.dart';
 import 'package:cerina/features/calendar/data/calendar_data.dart';
-import 'package:cerina/features/calendar/full_calendar_screen.dart'; // Import the new screen
+import 'package:cerina/features/calendar/full_calendar_screen.dart';
 import 'package:flutter/material.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -30,8 +29,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final responsive = Responsive();
-    responsive.init(context);
+    final screenSize = MediaQuery.of(context).size;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -39,10 +38,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
           children: [
             Image.asset(
               'assets/logos/CerinaLogo-Landscape.png',
-              width: responsive.width(20),
-              height: responsive.width(20),
+              width: screenSize.width * 0.20,
+              height: screenSize.width * 0.20,
             ),
-            SizedBox(width: responsive.width(2)),
+            SizedBox(width: screenSize.width * 0.02),
           ],
         ),
         actions: [
@@ -70,69 +69,62 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: responsive.height(2),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Pilih tanggal log',
-                  style: TextStyle(
-                    fontSize: responsive.fontSize(25),
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: screenSize.height * 0.02,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Pilih tanggal log',
+                    style: textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                Text(
-                  'Catat log Anda untuk hari ini atau hari sebelumnya.',
-                  style: TextStyle(
-                    fontSize: responsive.fontSize(14),
-                    color: Colors.black,
+                  Text(
+                    'Catat log Anda untuk hari ini atau hari sebelumnya.',
+                    style: textTheme.titleMedium,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          CalendarContainer(
-            responsive: responsive,
-            text: CalendarData.containerTitles[0],
-            selectedIndex: _selectedIndices[0],
-            onMiniContainerPressed: (index) =>
-                _onMiniContainerPressed(0, index),
-            containerIndex: 0,
-            customHeight: responsive.height(12),
-            onPressed: _navigateToFullCalendar, // Add navigation callback
-          ),
-          CalendarContainer(
-            responsive: responsive,
-            text: CalendarData.containerTitles[1],
-            selectedIndex: _selectedIndices[1],
-            onMiniContainerPressed: (index) =>
-                _onMiniContainerPressed(1, index),
-            containerIndex: 1,
-          ),
-          CalendarContainer(
-            responsive: responsive,
-            text: CalendarData.containerTitles[2],
-            selectedIndex: _selectedIndices[2],
-            onMiniContainerPressed: (index) =>
-                _onMiniContainerPressed(2, index),
-            containerIndex: 2,
-          ),
-          CalendarContainer(
-            responsive: responsive,
-            text: CalendarData.containerTitles[3],
-            selectedIndex: _selectedIndices[3],
-            onMiniContainerPressed: (index) =>
-                _onMiniContainerPressed(3, index),
-            containerIndex: 3,
-          ),
-        ],
+            CalendarContainer(
+              text: CalendarData.containerTitles[0],
+              selectedIndex: _selectedIndices[0],
+              onMiniContainerPressed: (index) =>
+                  _onMiniContainerPressed(0, index),
+              containerIndex: 0,
+              customHeight: screenSize.height * 0.12,
+              onPressed: _navigateToFullCalendar,
+            ),
+            CalendarContainer(
+              text: CalendarData.containerTitles[1],
+              selectedIndex: _selectedIndices[1],
+              onMiniContainerPressed: (index) =>
+                  _onMiniContainerPressed(1, index),
+              containerIndex: 1,
+            ),
+            CalendarContainer(
+              text: CalendarData.containerTitles[2],
+              selectedIndex: _selectedIndices[2],
+              onMiniContainerPressed: (index) =>
+                  _onMiniContainerPressed(2, index),
+              containerIndex: 2,
+            ),
+            CalendarContainer(
+              text: CalendarData.containerTitles[3],
+              selectedIndex: _selectedIndices[3],
+              onMiniContainerPressed: (index) =>
+                  _onMiniContainerPressed(3, index),
+              containerIndex: 3,
+            ),
+          ],
+        ),
       ),
     );
   }

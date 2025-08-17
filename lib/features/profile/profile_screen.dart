@@ -1,24 +1,17 @@
 import 'dart:ui'; // For BackdropFilter
 import 'package:cerina/features/profile/profile_setting.dart';
 import 'package:flutter/material.dart';
-import 'package:cerina/core/utils/responsive.dart'; // Adjust import path
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final responsive = Responsive();
-    responsive.init(context);
+    final screenSize = MediaQuery.of(context).size;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context); // Go back to previous screen
-          },
-        ),
         title: const Center(
           child: Text(
             'Pengaturan',
@@ -28,43 +21,18 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
         ),
-        actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'Logout') {
-                print('Logged out');
-              }
-            },
-            icon: const Icon(Icons.more_vert),
-            color: Colors.white,
-            itemBuilder: (context) => [
-              const PopupMenuItem<String>(
-                value: 'Profile',
-                child: Text('Profile', style: TextStyle(color: Colors.black)),
-              ),
-              const PopupMenuItem<String>(
-                value: 'Setting',
-                child: Text('Setting', style: TextStyle(color: Colors.black)),
-              ),
-              const PopupMenuItem<String>(
-                value: 'Logout',
-                child: Text('Logout', style: TextStyle(color: Colors.black)),
-              ),
-            ],
-          ),
-        ],
       ),
       body: Column(
         children: [
-          SizedBox(height: responsive.height(2)), // Spacing below AppBar
+          SizedBox(height: screenSize.height * 0.02),
           Center(
             child: Stack(
               alignment: Alignment.center,
               clipBehavior: Clip.none,
               children: [
                 Container(
-                  width: responsive.width(40),
-                  height: responsive.width(40),
+                  width: screenSize.width * 0.40,
+                  height: screenSize.width * 0.40,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.pink[400]!.withOpacity(0.3),
@@ -75,7 +43,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  top: responsive.width(35),
+                  top: screenSize.width * 0.35,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -88,11 +56,11 @@ class ProfileScreen extends StatelessWidget {
                           foregroundColor: Colors.pink[400],
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.circular(responsive.width(4)),
+                                BorderRadius.circular(screenSize.width * 0.04),
                           ),
                           padding: EdgeInsets.symmetric(
-                            horizontal: responsive.width(8),
-                            vertical: responsive.height(2),
+                            horizontal: screenSize.width * 0.08,
+                            vertical: screenSize.height * 0.02,
                           ),
                         ),
                         child: const Text(
@@ -100,7 +68,7 @@ class ProfileScreen extends StatelessWidget {
                           style: TextStyle(fontSize: 18),
                         ),
                       ),
-                      SizedBox(width: responsive.width(5)),
+                      SizedBox(width: screenSize.width * 0.05),
                       ElevatedButton(
                         onPressed: () {
                           print('Button 2 pressed');
@@ -110,11 +78,11 @@ class ProfileScreen extends StatelessWidget {
                           foregroundColor: Colors.pink[400],
                           shape: RoundedRectangleBorder(
                             borderRadius:
-                                BorderRadius.circular(responsive.width(4)),
+                                BorderRadius.circular(screenSize.width * 0.04),
                           ),
                           padding: EdgeInsets.symmetric(
-                            horizontal: responsive.width(8),
-                            vertical: responsive.height(2),
+                            horizontal: screenSize.width * 0.08,
+                            vertical: screenSize.height * 0.02,
                           ),
                         ),
                         child: const Text(
@@ -132,19 +100,17 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: responsive.height(8)), // Spacing below buttons
+          SizedBox(height: screenSize.height * 0.08),
           Text(
             'Pengaturan Dasar',
-            style: TextStyle(
-              fontSize: responsive.fontSize(20),
+            style: textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
-              color: Colors.black,
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: responsive.height(2)), // Spacing before long buttons
+          SizedBox(height: screenSize.height * 0.02),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: responsive.width(5)),
+            padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
             child: Column(
               children: [
                 ElevatedButton(
@@ -159,11 +125,12 @@ class ProfileScreen extends StatelessWidget {
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(responsive.width(4)),
+                      borderRadius:
+                          BorderRadius.circular(screenSize.width * 0.04),
                     ),
                     padding: EdgeInsets.symmetric(
-                      vertical: responsive.height(2.5),
-                      horizontal: responsive.width(6),
+                      vertical: screenSize.height * 0.025,
+                      horizontal: screenSize.width * 0.06,
                     ),
                     minimumSize: const Size(double.infinity, 0),
                   ),
@@ -172,19 +139,19 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.person, size: responsive.fontSize(18)),
-                          SizedBox(width: responsive.width(2)),
+                          const Icon(Icons.person),
+                          SizedBox(width: screenSize.width * 0.02),
                           Text(
                             'Kelola Akun',
-                            style: TextStyle(fontSize: responsive.fontSize(18)),
+                            style: textTheme.titleMedium,
                           ),
                         ],
                       ),
-                      Icon(Icons.arrow_forward, size: responsive.fontSize(18)),
+                      const Icon(Icons.arrow_forward),
                     ],
                   ),
                 ),
-                SizedBox(height: responsive.height(1)),
+                SizedBox(height: screenSize.height * 0.01),
                 ElevatedButton(
                   onPressed: () {
                     print('Long Button 2 pressed');
@@ -193,11 +160,12 @@ class ProfileScreen extends StatelessWidget {
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(responsive.width(4)),
+                      borderRadius:
+                          BorderRadius.circular(screenSize.width * 0.04),
                     ),
                     padding: EdgeInsets.symmetric(
-                      vertical: responsive.height(2.5),
-                      horizontal: responsive.width(6),
+                      vertical: screenSize.height * 0.025,
+                      horizontal: screenSize.width * 0.06,
                     ),
                     minimumSize: const Size(double.infinity, 0),
                   ),
@@ -206,19 +174,19 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.message, size: responsive.fontSize(18)),
-                          SizedBox(width: responsive.width(2)),
+                          const Icon(Icons.message),
+                          SizedBox(width: screenSize.width * 0.02),
                           Text(
                             'Ubah Waktu Respons',
-                            style: TextStyle(fontSize: responsive.fontSize(18)),
+                            style: textTheme.titleMedium,
                           ),
                         ],
                       ),
-                      Icon(Icons.arrow_forward, size: responsive.fontSize(18)),
+                      const Icon(Icons.arrow_forward),
                     ],
                   ),
                 ),
-                SizedBox(height: responsive.height(1)),
+                SizedBox(height: screenSize.height * 0.01),
                 ElevatedButton(
                   onPressed: () {
                     print('Long Button 3 pressed');
@@ -227,11 +195,12 @@ class ProfileScreen extends StatelessWidget {
                     backgroundColor: Colors.white,
                     foregroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(responsive.width(4)),
+                      borderRadius:
+                          BorderRadius.circular(screenSize.width * 0.04),
                     ),
                     padding: EdgeInsets.symmetric(
-                      vertical: responsive.height(2.5),
-                      horizontal: responsive.width(6),
+                      vertical: screenSize.height * 0.025,
+                      horizontal: screenSize.width * 0.06,
                     ),
                     minimumSize: const Size(double.infinity, 0),
                   ),
@@ -240,42 +209,38 @@ class ProfileScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.public, size: responsive.fontSize(18)),
-                          SizedBox(width: responsive.width(2)),
+                          const Icon(Icons.public),
+                          SizedBox(width: screenSize.width * 0.02),
                           Text(
                             'Layanan Pembaruan',
-                            style: TextStyle(fontSize: responsive.fontSize(18)),
+                            style: textTheme.titleMedium,
                           ),
                         ],
                       ),
-                      Icon(Icons.arrow_forward, size: responsive.fontSize(18)),
+                      const Icon(Icons.arrow_forward),
                     ],
                   ),
                 ),
-                SizedBox(height: responsive.height(2)),
+                SizedBox(height: screenSize.height * 0.02),
                 Container(
-                  padding: EdgeInsets.all(responsive.width(5)),
+                  padding: EdgeInsets.all(screenSize.width * 0.05),
                   decoration: BoxDecoration(
-                    color: Colors.grey[800], // Base greyish-black background
-                    borderRadius: BorderRadius.circular(responsive.width(4)),
-                    image: const DecorationImage(
-                      image: AssetImage('assets/images/profile_crown.png'),
-                      fit: BoxFit.cover,
-                      opacity: 0.5,
-                    ),
+                    color: Colors.grey[800],
+                    borderRadius:
+                        BorderRadius.circular(screenSize.width * 0.04),
                   ),
                   child: Stack(
                     clipBehavior: Clip.none,
                     children: [
                       Positioned(
-                        right: responsive.width(-7),
-                        bottom: responsive.width(-5),
+                        right: screenSize.width * -0.07,
+                        bottom: screenSize.width * -0.05,
                         child: Opacity(
                           opacity: 0.7,
                           child: Image.asset(
                             'assets/images/profile_crown.png',
-                            width: responsive.width(40),
-                            height: responsive.width(40),
+                            width: screenSize.width * 0.40,
+                            height: screenSize.width * 0.40,
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -285,21 +250,19 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           Text(
                             'Premium',
-                            style: TextStyle(
-                              fontSize: responsive.fontSize(16),
+                            style: textTheme.titleMedium?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: responsive.height(0.5)),
+                          SizedBox(height: screenSize.height * 0.005),
                           Text(
                             'Dapatkan fitur tambahan dengan berlangganan',
-                            style: TextStyle(
-                              fontSize: responsive.fontSize(14),
-                              color: Colors.grey,
+                            style: textTheme.bodyMedium?.copyWith(
+                              color: Colors.grey[400],
                             ),
                           ),
-                          SizedBox(height: responsive.height(1)),
+                          SizedBox(height: screenSize.height * 0.01),
                           ElevatedButton(
                             onPressed: () {
                               print('Pink Button pressed');
@@ -308,18 +271,18 @@ class ProfileScreen extends StatelessWidget {
                               backgroundColor: Colors.pink[400],
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(responsive.width(2)),
+                                borderRadius: BorderRadius.circular(
+                                    screenSize.width * 0.02),
                               ),
                               padding: EdgeInsets.symmetric(
-                                vertical: responsive.height(1),
-                                horizontal: responsive.width(3),
+                                vertical: screenSize.height * 0.01,
+                                horizontal: screenSize.width * 0.03,
                               ),
-                              minimumSize: Size(responsive.width(20), 0),
+                              minimumSize: Size(screenSize.width * 0.20, 0),
                             ),
-                            child: const Text(
+                            child: Text(
                               'Upgrade',
-                              style: TextStyle(fontSize: 14),
+                              style: textTheme.bodyMedium,
                             ),
                           ),
                         ],

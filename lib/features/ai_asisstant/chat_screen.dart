@@ -1,6 +1,5 @@
 import 'package:cerina/features/auth/data/auth_service.dart';
 import 'package:flutter/material.dart';
-import 'package:cerina/core/utils/responsive.dart'; // Adjust import path
 import 'data/api_service.dart';
 import 'data/chat_view_model.dart';
 import 'widgets/chat_input_widget.dart';
@@ -29,8 +28,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final responsive = Responsive();
-    responsive.init(context);
+    final screenSize = MediaQuery.of(context).size;
+    final pinkHeight = screenSize.height * 0.12;
 
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +47,7 @@ class _ChatScreenState extends State<ChatScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                height: responsive.pinkHeight,
+                height: pinkHeight,
                 color: Colors.pink[400],
               ),
               Expanded(
@@ -59,13 +58,13 @@ class _ChatScreenState extends State<ChatScreen> {
             ],
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: responsive.width(4)),
+            padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.04),
             child: Column(
               children: [
                 Row(
                   children: [
                     CircleAvatar(
-                      radius: responsive.width(5),
+                      radius: screenSize.width * 0.05,
                       backgroundColor: Colors.white,
                       child: Text(
                         "C",
@@ -76,7 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(width: responsive.width(2)),
+                    SizedBox(width: screenSize.width * 0.02),
                     const Text(
                       "Cerince",
                       style: TextStyle(
@@ -87,9 +86,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: responsive.height(0.5)),
+                SizedBox(height: screenSize.height * 0.005),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: responsive.height(1)),
+                  padding: EdgeInsets.symmetric(vertical: screenSize.height * 0.01),
                   child: const Text(
                     "Tanyakan apa saja mengenai menstruasi dan cervix. Cerince siap membantu!",
                     style: TextStyle(
@@ -104,23 +103,23 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
           Positioned(
-            top: responsive.pinkHeight,
+            top: pinkHeight,
             left: 0,
             right: 0,
             bottom: 0,
             child: SafeArea(
               top: false,
               child: Padding(
-                padding: EdgeInsets.all(responsive.width(4)),
+                padding: EdgeInsets.all(screenSize.width * 0.04),
                 child: Column(
                   children: [
                     Expanded(
                       child: ChatMessageList(
                         messages: _chatViewModel.chatMessages,
-                        isLoading: _chatViewModel.isLoading, // Pass loading state
+                        isLoading: _chatViewModel.isLoading,
                       ),
                     ),
-                    SizedBox(height: responsive.height(2)),
+                    SizedBox(height: screenSize.height * 0.02),
                     ChatInput(
                       controller: _controller,
                       onSend: _handleSendMessage,

@@ -1,15 +1,12 @@
-import 'package:cerina/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
 class MiniContainer extends StatelessWidget {
-  final Responsive responsive;
   final bool isSelected;
   final VoidCallback onPressed;
   final String? backgroundImage;
 
   const MiniContainer({
     super.key,
-    required this.responsive,
     required this.isSelected,
     required this.onPressed,
     this.backgroundImage,
@@ -17,23 +14,25 @@ class MiniContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        width: responsive.width(20), // Original size
-        height: responsive.width(20), // Original size
+        width: screenSize.width * 0.20,
+        height: screenSize.width * 0.20,
         decoration: BoxDecoration(
           color: isSelected
               ? Colors.pink[400]
-              : Colors.white, // Pink if selected, white otherwise
+              : Colors.white,
           image: backgroundImage != null
               ? DecorationImage(
                   image: AssetImage(backgroundImage!),
                   fit: BoxFit.contain,
-                  scale: 10.0, // Scales image down (higher value = smaller)
+                  scale: 10.0,
                 )
               : null,
-          borderRadius: BorderRadius.circular(responsive.width(2)),
+          borderRadius: BorderRadius.circular(screenSize.width * 0.02),
           border: Border.all(color: Colors.pink),
         ),
       ),

@@ -1,55 +1,45 @@
 // lib/features/homepage/widgets/education_card.dart
 import 'package:flutter/material.dart';
-import 'package:cerina/core/utils/responsive.dart';
 
 class EducationCard extends StatelessWidget {
   final String imagePath;
   final String title;
   final String subtitle;
-  final Responsive responsive;
 
   const EducationCard({
     super.key,
     required this.imagePath,
     required this.title,
     required this.subtitle,
-    required this.responsive,
   });
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
-      width: responsive.width(43),
-      height: responsive.height(15),
+      width: screenSize.width * 0.43,
+      height: screenSize.height * 0.15,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.pink[400]!),
-        borderRadius: BorderRadius.circular(responsive.width(4)),
+        borderRadius: BorderRadius.circular(screenSize.width * 0.04),
       ),
-      child: ClipRect(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(screenSize.width * 0.04),
         child: Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(responsive.width(4)),
-              ),
-              child: Image.asset(
-                imagePath,
-                width: responsive.width(50),
-                height: responsive.height(14) * 0.72, // ~10.8% screen height
-                fit: BoxFit.cover,
-              ),
+            Image.asset(
+              imagePath,
+              width: double.infinity, // Take full width of parent
+              height: (screenSize.height * 0.15) * 0.6, // 60% of card height
+              fit: BoxFit.cover,
             ),
-            Container(
-              width: responsive.width(50),
-              height: responsive.height(15) * 0.28, // ~4.2% screen height
-              decoration: BoxDecoration(
+            Expanded(
+              child: Container(
+                width: double.infinity,
                 color: Colors.white,
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(responsive.width(4)),
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: responsive.width(2)),
+                padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.02),
                 child: Row(
                   children: [
                     Expanded(
@@ -59,17 +49,14 @@ class EducationCard extends StatelessWidget {
                         children: [
                           Text(
                             title,
-                            style: TextStyle(
-                              fontSize: responsive.fontSize(13),
-                              color: Colors.black,
+                            style: textTheme.titleSmall?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             subtitle,
-                            style: TextStyle(
-                              fontSize: responsive.fontSize(11),
+                            style: textTheme.bodySmall?.copyWith(
                               color: Colors.black54,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -79,7 +66,7 @@ class EducationCard extends StatelessWidget {
                     ),
                     Icon(
                       Icons.arrow_forward,
-                      size: responsive.fontSize(14),
+                      size: textTheme.titleSmall?.fontSize,
                       color: Colors.pink[400],
                     ),
                   ],

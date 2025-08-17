@@ -1,7 +1,6 @@
 // lib/features/homepage/homepage_screen.dart
 import 'package:cerina/features/homepage/widgets/at_section.dart';
 import 'package:flutter/material.dart';
-import 'package:cerina/core/utils/responsive.dart';
 import 'data/homepage_data.dart';
 import 'widgets/first_container.dart';
 import 'widgets/second_container.dart';
@@ -17,63 +16,26 @@ class HomepageScreen extends StatefulWidget {
 class _HomepageScreenState extends State<HomepageScreen> {
   @override
   Widget build(BuildContext context) {
-    final responsive = Responsive();
-    responsive.init(context);
+    final screenSize = MediaQuery.of(context).size;
     final data = HomepageData.getData();
-
-    // SliverAppBar height when expanded
-    final double appBarHeight = responsive.height(2); // ~10% ≈ 108px on 1080p
-
-    // EducationSection: header + 2 cards + spacing
-    final double educationSectionHeight =
-        responsive.fontSize(16) + // Header approximation
-            (2 * responsive.height(15)) + // Two cards
-            responsive.height(1); // Spacing between cards
-
-    // AtSection: header + 2 cards (135px each) + spacing
-    final double atSectionHeight =
-        responsive.fontSize(16) + // Header approximation
-            (2 * 135) + // Two fixed-height cards
-            responsive.height(1); // Spacing between cards
-
-    // EducationSection start position (adjusted for SliverAppBar)
-    final double educationStart = responsive.pinkHeight +
-        (responsive.height(28) / 2) +
-        responsive.height(8) +
-        responsive.width(4);
-
-    // AtSection starts right below EducationSection's second card
-    final double atSectionTop = educationStart +
-        responsive.fontSize(16) + // Header
-        (2 * responsive.height(15)) + // Two cards
-        responsive.height(1); // Spacing between cards
-
-    final double totalContentHeight = appBarHeight + // SliverAppBar
-        responsive.pinkHeight +
-        responsive.height(25) + // FirstContainer
-        responsive.height(18) + // SecondContainer
-        responsive.height(2) + // EducationSection spacing
-        educationSectionHeight +
-        responsive.height(2) + // Spacing before AtSection
-        atSectionHeight;
 
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
             backgroundColor: Colors.pink[400],
-            expandedHeight: appBarHeight, // Collapsible height
-            floating: true, // Stays until fully scrolled
-            pinned: false, // Collapses when scrolled
+            expandedHeight: screenSize.height * 0.02,
+            floating: true,
+            pinned: false,
             title: Row(
               children: [
                 Image.asset(
                   'assets/logos/CerinaLogo-Landscape.png',
-                  width: responsive.width(20),
-                  height: responsive.width(20),
+                  width: screenSize.width * 0.20,
+                  height: screenSize.width * 0.20,
                   color: Colors.white,
                 ),
-                SizedBox(width: responsive.width(2)),
+                SizedBox(width: screenSize.width * 0.02),
               ],
             ),
             actions: [
@@ -105,51 +67,43 @@ class _HomepageScreenState extends State<HomepageScreen> {
               ),
             ],
           ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: totalContentHeight -
-                  appBarHeight, // Subtract app bar height from content
-              child: Stack(
+          SliverList(
+            delegate: SliverChildListDelegate([
+              Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.topCenter,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        height: responsive.pinkHeight,
-                        color: Colors.pink[400],
-                      ),
-                      Expanded(
-                        child: Container(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+                  Container(
+                    height: screenSize.height * 0.12, // pinkHeight
+                    color: Colors.pink[400],
                   ),
-                  FirstContainer(
-                    data: data,
-                    topPosition:
-                        responsive.pinkHeight - (responsive.height(22) / 2),
-                  ),
-                  SecondContainer(
-                    data: data,
-                    topPosition: responsive.pinkHeight +
-                        (responsive.height(28) / 2) +
-                        responsive.width(2),
-                  ),
-                  EducationSection(
-                    data: data,
-                    topPosition: responsive.pinkHeight +
-                        (responsive.height(28) / 2) +
-                        responsive.height(18) +
-                        responsive.width(4),
-                  ),
-                  AtSection(
-                    data: data,
-                    topPosition: atSectionTop,
+                  Positioned(
+                    top: (screenSize.height * 0.12) -
+                        ((screenSize.height * 0.22) / 2),
+                    left: screenSize.width * 0.05,
+                    right: screenSize.width * 0.05,
+                    child: FirstContainer(data: data),
                   ),
                 ],
               ),
-            ),
+              SizedBox(
+                  height: (screenSize.height * 0.23) / 2 +
+                      (screenSize.width * 0.04)),
+              Padding(
+                padding:
+                    EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                child: Column(
+                  children: [
+                    SecondContainer(data: data),
+                    SizedBox(height: screenSize.height * 0.03),
+                    EducationSection(data: data),
+                    SizedBox(height: screenSize.height * 0.03),
+                    AtSection(data: data),
+                    SizedBox(height: screenSize.height * 0.03),
+                  ],
+                ),
+              ),
+            ]),
           ),
         ],
       ),

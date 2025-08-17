@@ -1,5 +1,5 @@
-import 'package:cerina/core/utils/responsive.dart';
 import 'package:cerina/features/auth/data/auth_service.dart';
+import 'package:cerina/features/auth/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:auth0_flutter/auth0_flutter.dart';
 
@@ -31,9 +31,21 @@ class _ProfileSettingState extends State<ProfileSetting> {
     }
   }
 
+  Future<void> _logout() async {
+    final authService = AuthService();
+    await authService.logout();
+    if (mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+        (Route<dynamic> route) => false,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final responsive = Responsive()..init(context);
+    final screenSize = MediaQuery.of(context).size;
+    final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -65,71 +77,82 @@ class _ProfileSettingState extends State<ProfileSetting> {
                 )
               : SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
-                    vertical: responsive.height(2),
-                    horizontal: responsive.width(5),
+                    vertical: screenSize.height * 0.02,
+                    horizontal: screenSize.width * 0.05,
                   ),
                   child: Column(
                     children: [
                       CircleAvatar(
-                        radius: responsive.width(15),
+                        radius: screenSize.width * 0.15,
                         backgroundImage: _user?.pictureUrl != null
                             ? NetworkImage(_user!.pictureUrl.toString())
                             : null,
                         child: _user?.pictureUrl == null
-                            ? Icon(Icons.person, size: responsive.width(15))
+                            ? Icon(Icons.person, size: screenSize.width * 0.15)
                             : null,
                       ),
-                      SizedBox(height: responsive.height(2)),
+                      SizedBox(height: screenSize.height * 0.02),
                       Text(
                         _user?.name ?? 'User Name',
-                        style: TextStyle(
-                          fontSize: responsive.fontSize(22),
+                        style: textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         _user?.email ?? 'user.email@example.com',
-                        style: TextStyle(
-                          fontSize: responsive.fontSize(16),
+                        style: textTheme.titleMedium?.copyWith(
                           color: Colors.grey[600],
                         ),
                       ),
-                      SizedBox(height: responsive.height(4)),
+                      SizedBox(height: screenSize.height * 0.04),
                       ProfileInfoTile(
-                        responsive: responsive,
                         icon: Icons.person_outline,
                         label: 'Name',
                         value: _user?.name ?? 'N/A',
                       ),
-                      SizedBox(height: responsive.height(1.5)),
+                      SizedBox(height: screenSize.height * 0.015),
                       ProfileInfoTile(
-                        responsive: responsive,
                         icon: Icons.email_outlined,
                         label: 'Email',
                         value: _user?.email ?? 'N/A',
                       ),
-                      SizedBox(height: responsive.height(1.5)),
+                      SizedBox(height: screenSize.height * 0.015),
                       ProfileInfoTile(
-                        responsive: responsive,
                         icon: Icons.verified_user_outlined,
                         label: 'Email Verified',
                         value: _user?.isEmailVerified?.toString() ?? 'N/A',
                       ),
-                      SizedBox(height: responsive.height(1.5)),
+                      SizedBox(height: screenSize.height * 0.015),
                       ProfileInfoTile(
-                        responsive: responsive,
                         icon: Icons.update_outlined,
                         label: 'Updated At',
-                        value: _user?.updatedAt?.toLocal().toString().split(' ')[0] ??
+                        value: _user?.updatedAt
+                                ?.toLocal()
+                                .toString()
+                                .split(' ')[0] ??
                             'N/A',
                       ),
-                      SizedBox(height: responsive.height(1.5)),
+                      SizedBox(height: screenSize.height * 0.015),
                       ProfileInfoTile(
-                        responsive: responsive,
                         icon: Icons.fingerprint,
                         label: 'User ID',
                         value: _user?.sub ?? 'N/A',
                       ),
+                      SizedBox(height: screenSize.height * 0.03),
+                      ElevatedButton.icon(
+                        onPressed: _logout,
+                        icon: const Icon(Icons.logout),
+                        label: const Text('Log Out'),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.pink[400],
+                          minimumSize: const Size(double.infinity, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.circular(screenSize.width * 0.04),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -137,16 +160,13 @@ class _ProfileSettingState extends State<ProfileSetting> {
   }
 }
 
-/// A styled tile to display a piece of profile information.
 class ProfileInfoTile extends StatelessWidget {
-  final Responsive responsive;
   final IconData icon;
   final String label;
   final String value;
 
   const ProfileInfoTile({
     super.key,
-    required this.responsive,
     required this.icon,
     required this.label,
     required this.value,
@@ -154,14 +174,17 @@ class ProfileInfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final textTheme = Theme.of(context).textTheme;
+
     return Container(
       padding: EdgeInsets.symmetric(
-        vertical: responsive.height(2),
-        horizontal: responsive.width(4),
+        vertical: screenSize.height * 0.02,
+        horizontal: screenSize.width * 0.04,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(responsive.width(4)),
+        borderRadius: BorderRadius.circular(screenSize.width * 0.04),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.1),
@@ -173,21 +196,18 @@ class ProfileInfoTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, color: Colors.grey[600], size: responsive.fontSize(20)),
-          SizedBox(width: responsive.width(4)),
+          Icon(icon,
+              color: Colors.grey[600], size: textTheme.titleLarge?.fontSize),
+          SizedBox(width: screenSize.width * 0.04),
           Text(
             label,
-            style: TextStyle(
-              fontSize: responsive.fontSize(16),
-              fontWeight: FontWeight.w600,
-            ),
+            style: textTheme.titleMedium,
           ),
           const Spacer(),
           Flexible(
             child: Text(
               value,
-              style: TextStyle(
-                fontSize: responsive.fontSize(16),
+              style: textTheme.titleMedium?.copyWith(
                 color: Colors.grey[800],
               ),
               overflow: TextOverflow.ellipsis,

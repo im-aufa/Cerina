@@ -17,17 +17,15 @@ class ChatInput extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         labelText: "Masukan pertanyaan",
-        labelStyle:
-            const TextStyle(color: Colors.black), // Optional: pink label
+        labelStyle: const TextStyle(color: Colors.black),
         border: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.pink), // Default border
+          borderSide: BorderSide(color: Colors.pink),
         ),
         enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.pink), // Unfocused border
+          borderSide: BorderSide(color: Colors.pink),
         ),
         focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-              color: Colors.pink, width: 2), // Focused border, slightly thicker
+          borderSide: BorderSide(color: Colors.pink, width: 2),
         ),
         suffixIcon: IconButton(
           onPressed: onSend,
