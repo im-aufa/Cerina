@@ -59,7 +59,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ? _pages[_currentPage]
             : null;
 
-    final isFinalPage = (currentPageData?.pageType ?? OnboardingPageType.informational) == OnboardingPageType.finalPage;
+    final isFinalPage =
+        (currentPageData?.pageType ?? OnboardingPageType.informational) ==
+            OnboardingPageType.finalPage;
 
     return Scaffold(
       body: Stack(
@@ -81,10 +83,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         return child;
                       }
                       return AnimatedOpacity(
-                        child: child,
                         opacity: frame == null ? 0 : 1,
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeOut,
+                        child: child,
                       );
                     },
                   )
@@ -115,8 +117,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   child: SmoothPageIndicator(
                     controller: _controller,
                     count: _pages
-                        .where((p) =>
-                            p.pageType != OnboardingPageType.finalPage)
+                        .where(
+                            (p) => p.pageType != OnboardingPageType.finalPage)
                         .length, // Adjust count to exclude final page
                     effect: const ExpandingDotsEffect(
                       dotColor: Colors.grey,

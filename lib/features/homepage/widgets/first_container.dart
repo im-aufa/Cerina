@@ -59,6 +59,8 @@ class FirstContainer extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: data.firstContainerItems.map((item) {
+                  final isNumber = !item['image']!.contains('/');
+
                   return Container(
                     width: screenSize.height * 0.11,
                     height: screenSize.height * 0.11,
@@ -73,11 +75,20 @@ class FirstContainer extends StatelessWidget {
                           item['title']!,
                           style: textTheme.bodySmall,
                         ),
-                        Image.asset(
-                          item['image']!,
-                          width: screenSize.height * 0.04,
-                          height: screenSize.height * 0.04,
-                        ),
+                        isNumber
+                            ? Text(
+                                item['image']!,
+                                style: TextStyle(
+                                  fontSize: screenSize.height * 0.04,
+                                  color: Colors.pink,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : Image.asset(
+                                item['image']!,
+                                width: screenSize.height * 0.04,
+                                height: screenSize.height * 0.04,
+                              ),
                         Text(
                           item['subtitle']!,
                           style: textTheme.bodySmall,

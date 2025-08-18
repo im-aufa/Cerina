@@ -62,9 +62,9 @@ class _ProfileSettingState extends State<ProfileSetting> {
             ),
           ),
         ),
-        actions: [
+        actions: const [
           IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.transparent),
+            icon: Icon(Icons.more_vert, color: Colors.transparent),
             onPressed: null,
           ),
         ],

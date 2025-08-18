@@ -4,9 +4,11 @@ import 'package:cerina/features/onboarding/onboarding_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   await dotenv.load();
+  await initializeDateFormatting('id_ID', null);
 
   final authService = AuthService();
   bool isAuthenticated = false;

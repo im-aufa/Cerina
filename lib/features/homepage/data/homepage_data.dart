@@ -1,4 +1,6 @@
 // lib/features/homepage/data/homepage_data.dart
+import 'package:intl/intl.dart';
+
 class HomepageData {
   final String firstContainerTitle;
   final String firstContainerSubtitle;
@@ -21,14 +23,18 @@ class HomepageData {
   });
 
   static HomepageData getData() {
+    final now = DateTime.now();
+    final day = DateFormat('d').format(now);
+    final month = DateFormat('MMMM', 'id_ID').format(now);
+
     return HomepageData(
       firstContainerTitle: 'Aliran Menstruasi',
       firstContainerSubtitle: 'Siklus Menstruasi Hari ke 3',
       firstContainerItems: [
         {
           'title': 'Hari ini',
-          'image': 'assets/logos/CerinaLogo.png',
-          'subtitle': 'Februari'
+          'image': day, // Special value for the day
+          'subtitle': month
         },
         {
           'title': 'Status',
